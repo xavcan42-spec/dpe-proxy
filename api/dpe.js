@@ -16,10 +16,10 @@ export default async function handler(req, res) {
   });
 
   let qs = 'etiquette_dpe:(F OR G)';
-  if (citycode) qs += ` AND code_insee_commune_actualise:${citycode}`;
+  if (citycode) qs += ` AND code_insee_ban:${citycode}`;
   params.append('qs', qs);
 
-  const url = `https://data.ademe.fr/data-fair/api/v1/datasets/dpe03existant/lines?${params.toString()}`;
+  const url = `https://data.ademe.fr/data-fair/api/v1/datasets/meg-83tjwtg8dyz4vv7h1dqe/lines?${params.toString()}`;
 
   try {
     const response = await fetch(url, {
