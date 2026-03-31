@@ -10,9 +10,8 @@ export default async function handler(req, res) {
   const { citycode } = req.query;
 
   const params = new URLSearchParams({
-    size: '20',
-    select: 'adresse_ban,etiquette_dpe,conso_5_usages_e_finale,annee_construction,surface_habitable_logement,type_batiment',
-    sort: 'etiquette_dpe',
+    size: '5',
+    select: 'adresse_ban,etiquette_dpe,annee_construction,surface_habitable_logement',
   });
 
   let qs = 'etiquette_dpe:(F OR G)';
@@ -29,14 +28,20 @@ export default async function handler(req, res) {
       }
     });
 
-    if (!response.ok) {
-      const text = await response.text();
-      return res.status(response.status).json({ error: `ADEME error: ${response.status}`, detail: text });
-    }
+    const text = await response.text();
 
-    const data = await response.json();
-    return res.status(200).json(data);
+    return res.status(200).json({
+      status: response.status,
+      ok: response.ok,
+      url: url,
+      body: text.substring(0, 500)
+    });
+
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(200).json({
+      caught: true,
+      message: error.message,
+      url: url
+    });
   }
 }
